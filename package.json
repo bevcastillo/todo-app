@@ -1,0 +1,28 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon server.js",
+    "migration:make": "knex migrate:make",
+    "migrate": "knex migrate:latest",
+    "seed:make": "knex seed:make",
+    "seed:run": "knex seed:run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.20.6",
+    "mysql": "^2.17.1",
+    "objection": "^2.0.10"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
