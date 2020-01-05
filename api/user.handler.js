@@ -89,7 +89,7 @@ module.exports = (express) => {
 		});
 	});
 
-	api.get('/', isAuthenticated, async (req, res) => {
+	api.get('/', async (req, res) => {
 		const users = await User.query();
 		const data = {
 			success: true,

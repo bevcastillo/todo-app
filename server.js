@@ -6,7 +6,12 @@ const express = require('express');
 // import body-parser
 const bodyParser = require('body-parser');
 
+// logging library
+const morgan = require('morgan');
+
 const app = express(); // invokes the express API.
+
+app.use(morgan('combined'));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
