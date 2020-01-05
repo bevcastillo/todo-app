@@ -4,8 +4,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../model/user');
+const isAuthenticated = require('../middleware/auth');
+const config = require('../config.json');
 
-const JWT_PHRASE = process.env.JWT_PHRASE || 'Subsystem^Surging^Cogwheel^Outgoing^Tipped^Kindred^Steadily^Refinery^Blurt1^Armful^Stiffness^Edginess';
 const SALT_ROUNDS = 12;
 
 // export this file as importable to server.js
@@ -33,15 +34,14 @@ module.exports = (express) => {
 			username: user[0].username,
 			isAuthenticated: true
 		}
-
-		const token = jwt.sign(payload, JWT_PHRASE, { algorithm: 'HS256'});
+		const token = jwt.sign(payload, config.JWT_PASSPHRASE, { algorithm: 'HS256'});
 
 		return res.status(200).json({
 			success: true,
 			message: "User succesfully logged in",
 			token: token,
 			data: user
-		})
+		});
 	});
 
 	api.post('/register', async (req, res) => {
@@ -89,7 +89,7 @@ module.exports = (express) => {
 		});
 	});
 
-	api.get('/', async (req, res) => {
+	api.get('/', isAuthenticated, async (req, res) => {
 		const users = await User.query();
 		const data = {
 			success: true,
