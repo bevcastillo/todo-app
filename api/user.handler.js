@@ -1,9 +1,11 @@
 'use strict';
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const User = require('../model/user');
 
+const JWT_PHRASE = process.env.JWT_PHRASE || 'Subsystem^Surging^Cogwheel^Outgoing^Tipped^Kindred^Steadily^Refinery^Blurt1^Armful^Stiffness^Edginess';
 const SALT_ROUNDS = 12;
 
 // export this file as importable to server.js
@@ -26,9 +28,18 @@ module.exports = (express) => {
 			});
 		}
 
+		const payload = {
+			id: user[0].id,
+			username: user[0].username,
+			isAuthenticated: true
+		}
+
+		const token = jwt.sign(payload, JWT_PHRASE, { algorithm: 'HS256'});
+
 		return res.status(200).json({
 			success: true,
 			message: "User succesfully logged in",
+			token: token,
 			data: user
 		})
 	});
