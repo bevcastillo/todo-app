@@ -40,7 +40,7 @@ module.exports = (express) => {
 			success: true,
 			message: "User succesfully logged in",
 			token: token,
-			data: user
+			user: user[0]
 		});
 	});
 
