@@ -1,5 +1,11 @@
 # TODO APP
 
+# Cloning:
+---
+```sh
+$ git clone https://github.com/rbo13/todo-app.git
+```
+
 
 # Installation:
 ---
