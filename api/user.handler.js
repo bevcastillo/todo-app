@@ -10,6 +10,29 @@ const SALT_ROUNDS = 12;
 module.exports = (express) => {
 	const api = express.Router();
 
+	api.post('/login', async (req, res) => {
+		const username = req.body.username;
+		const password = req.body.password;
+	
+		const user = await User.query().where('username', '=', username);
+		const hashedPassword = user[0].password;
+
+		const passwordCorrect = await comparePasswords(password, hashedPassword);
+		
+		if (!passwordCorrect) {
+			return res.status(200).json({
+				success: false,
+				message: 'Username/Password is not correct',
+			});
+		}
+
+		return res.status(200).json({
+			success: true,
+			message: "User succesfully logged in",
+			data: user
+		})
+	});
+
 	api.post('/register', async (req, res) => {
 		const password = req.body.password;
 		const confirmPassword = req.body.confirm_password;
@@ -83,4 +106,22 @@ async function hashPassword(rawPassword) {
 	});
 
 	return hashedPassword;
+}
+
+async function comparePasswords(rawPassword, hashedPassword) {
+	if (!rawPassword) {
+		throw new Error('Password is required');
+	}
+
+	const hasSamePassword = await new Promise((resolve, reject) => {
+		bcrypt.compare(rawPassword, hashedPassword, (err, isMatch) => {
+			if (err) {
+				return reject(err);
+			}
+
+			return resolve(isMatch);
+		});
+	});
+
+	return hasSamePassword;
 }
